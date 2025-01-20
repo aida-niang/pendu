@@ -1,0 +1,4 @@
+Monday 20 January 2025 à 17:38:37 - ['y', 'a', 'n', 'n', 'i', 's'] : 2
+Monday 20 January 2025 à 17:40:02 - ['y', 'a', 'n', 'n', 'i', 's'] : 4
+Monday 20 January 2025 Ã  17:47:17 - mimi : 4
+Monday 20 January 2025 Ã  18:04:05 - mimi : 3
