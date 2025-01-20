@@ -51,8 +51,13 @@ def ask_user() :
 
         print(user_word)
 
+        # I want to join all the found letters in one string, for this I use the function join(), it is the inverse of split(),
+        #it allows to assemble the elements of different sequences like tuples or list (the case here)
+        word = ''.join(user_word)
+        
+
         if ' _ ' not in user_word :
-            print(f"Congratulations. You are winner")
+            print(f"Congratulations. You have found the word, it is : {word}")
             break
 
 
