@@ -6,7 +6,19 @@ import names
 #######################################################################################
 #In the beginning I will define a liste in the same file, containning some words
 #Then later, I will create a separated text file
-words = ['amina', 'aida', 'yannis']
+#words = ['amina', 'aida', 'yannis']
+
+#Now I will import the words from the text  file (words) :
+def read_words():
+    try:
+        with open("words.txt", "r") as file:
+            word_f = file.readlines()
+            
+    except FileNotFoundError:
+        print("No score file found.")
+    except Exception as e:
+        print(f"An error occurred while reading score file: {e}")
+    return word_f
 
 ########################################################################################
 #to generate a list of nouns and stock them in an independent file, I can use them as my DB
@@ -27,7 +39,7 @@ def generate_n() :
 #Define the functions :
 # This function allows to select randomly an element from the defined list
 #I create an empty list and I will fill it with the randomly selected word and its size
-def hasard_word() :
+def hasard_word(words) :
 
     choosen_word = random.choice(words)
     len_word = len(choosen_word)
@@ -170,7 +182,8 @@ try:
         display_menu()
         choice = input(f"Choose an option (1 - 2 - 3 - 4 - 5 - 6) :")
         if choice == '1' :
-            choosen_word, len_word = hasard_word()
+            words = read_words()
+            choosen_word, len_word = hasard_word(words)
             user_word, score, user_name = ask_user(choosen_word, len_word)
             score_player(user_name, score)
             if not play_again():
