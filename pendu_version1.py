@@ -1,12 +1,34 @@
 #import the necessary libraries :
 import random 
 import datetime
+import names
 
 #######################################################################################
 #In the beginning I will define a liste in the same file, containning some words
 #Then later, I will create a separated text file
 words = ['amina', 'aida', 'yannis']
 
+#to generate a list of nouns and stock them in an independent file, I can use them as my DB
+def generate_n() :
+    global choosen_name
+    man_name = names.get_first_name(gender='male')
+    woman_name = names.get_first_name(gender='female')
+    try :
+        choice_name = input(f"Do you want to generate man names or woman names ? (m/w)").strip().lower()
+        if choice_name == 'm' :
+            choosen_name = man_name
+            save_names(man_name)
+
+        elif choice_name == 'w' :
+            choosen_name = woman_name
+            save_names(woman_name)
+
+        else :
+            print(f"Please enter 'm' or 'w' !")
+
+    except ValueError :
+        print(f"Invalid input")
+    return choosen_name
 #########################################################################################
 #Define the functions :
 # This function allows to select randomly an element from the defined list
@@ -24,12 +46,12 @@ def hasard_word() :
 def ask_user(choosen_word, len_word) :
     user_name = input(f"Please, enter your name : ").strip().lower()
     print(f"Hello {user_name}, I have selected randomly a word from the list. It contains {len_word} letters ! ")
-    user_word = [' _ ']*len_word #This word is the one the user builds up as they go along
+    user_word = [' _ ']*len_word #This word is the one the user builds up as4 they go along
     print(f"{user_word}\n")
 
     score = 0
     while True :
-        user_choice = input(f"Please, select a letter from your choice to fill in the blanks : ").strip()
+        user_choice = input(f"Please, select a letter from your choice to fill in the blanks : ").strip().lower()
         if user_choice in choosen_word :  #verify if the letter entered by the user exists in the randomly choosen word
             print('Congratulations, you have found one letter of the word !')
             for i in range (0, len_word) :
@@ -71,34 +93,67 @@ def score_player(user_name, score) :
 def save_score(user_name, score):
     try:
         current_time = datetime.datetime.now().strftime("%A %d %B %Y à %H:%M:%S")
-        history_entry = f"{current_time} - {user_name} : {score}"
+        score_entry = f"{current_time} - {user_name} : {score}"
         with open("score.txt", "a", encoding="utf-8") as file:
-            file.write(history_entry + "\n")
+            file.write(score_entry + "\n")
     except Exception as e:
-        print(f"An error occurred while saving to history: {e}")
+        print(f"An error occurred while saving score file: {e}")
 
 def read_score():
     try:
         with open("score.txt", "r") as file:
-            history = file.readlines()
-            if not history:
-                print("No operations in history.")
+            score_f = file.readlines()
+            if not score_f:
+                print("No operations in score file.")
             else:
-                print("History of operations:")
-                for line in history:
+                print("The scores are :")
+                for line in score_f:
                     print(line.strip())
     except FileNotFoundError:
-        print("No history file found.")
+        print("No score file found.")
     except Exception as e:
-        print(f"An error occurred while reading history: {e}")
+        print(f"An error occurred while reading score file: {e}")
 
 def clear_score():
     try:
         with open("score.txt", "w") as file:
             file.truncate(0)
-        print("Score history cleared successfully.")
+        print("Score file cleared successfully.")
     except Exception as e:
-        print(f"An error occurred while clearing history: {e}")
+        print(f"An error occurred while clearing score file: {e}")
+
+#############################################################################################
+# Create 3 functions to save the generated names from the library names, read and clear them
+def save_names():
+    try:
+        names_entry = f" - {choosen_name}"
+        with open("names.txt", "a", encoding="utf-8") as file:
+            file.write(names_entry + "\n")
+    except Exception as e:
+        print(f"An error occurred while saving names file: {e}")
+
+def read_names():
+    try:
+        with open("names.txt", "r") as file:
+            names_f = file.readlines()
+            if not names_f:
+                print("There is no names.")
+            else:
+                print("The generated names:")
+                for line in names_f :
+                    print(line.strip())
+    except FileNotFoundError:
+        print("No names file found.")
+    except Exception as e:
+        print(f"An error occurred while reading names file: {e}")
+
+def clear_names():
+    try:
+        with open("names.txt", "w") as file:
+            file.truncate(0)
+        print("Names file cleared successfully.")
+    except Exception as e:
+        print(f"An error occurred while clearing names file: {e}")
 
 
 ############################################################################################
@@ -107,16 +162,20 @@ def display_menu():
     print(f"\nWelcome to Our hangman game !")
     print(f"\n****** Menu *******")
     print(f"1. Launch the game")
-    print(f"2. View score history")
-    print(f"3. Clear score history")
-    print(f"4. Exit")
+    print(f"2. View score file")
+    print(f"3. Clear score file")
+    print(f"4. Generate names randomly")
+    print(f"5. View names file")
+    print(f"6. Clear names file")
+    print(f"7. Exit")
 
 #############################################################################################
 #The main loop of the game
 try:
     while True:
         display_menu()
-        choice = input(f"Choose an option (1 - 2 - 3 - 4) :")
+        generate_n()
+        choice = input(f"Choose an option (1 - 2 - 3 - 4 - 5 - 6) :")
         if choice == '1' :
             choosen_word, len_word = hasard_word()
             user_word, score, user_name = ask_user(choosen_word, len_word)
@@ -129,18 +188,35 @@ try:
             break
         elif choice == '3' :
             while True:  
-                confirm = input("Do you really want to clear the score history? (yes/no): ").strip().lower()
+                confirm = input("Do you really want to clear the score file ? (yes/no): ").strip().lower()
                 if confirm == "yes":
                     clear_score()
                     break  
                 elif confirm == "no":
-                    print("The score history not cleared.")
+                    print("The score file not cleared.")
+                    break  
+                else:
+                    print("Invalid input. Please type 'yes' or 'no'.")
+                    break
+        elif choice == '4' :
+            generate_n()
+        elif choice == '5' :
+            read_names()
+            break
+        elif choice == '6' :
+            while True:  
+                confirm = input("Do you really want to clear the names file ? (yes/no): ").strip().lower()
+                if confirm == "yes":
+                    clear_names()
+                    break  
+                elif confirm == "no":
+                    print("The names file not cleared.")
                     break  
                 else:
                     print("Invalid input. Please type 'yes' or 'no'.")
                     break
 
-        elif choice == '4' :
+        elif choice == '7' :
             print("\nExiting the game...")
             exit()
 except KeyboardInterrupt:
