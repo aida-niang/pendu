@@ -8,27 +8,21 @@ import names
 #Then later, I will create a separated text file
 words = ['amina', 'aida', 'yannis']
 
+########################################################################################
 #to generate a list of nouns and stock them in an independent file, I can use them as my DB
 def generate_n() :
-    global choosen_name
-    man_name = names.get_first_name(gender='male')
-    woman_name = names.get_first_name(gender='female')
-    try :
-        choice_name = input(f"Do you want to generate man names or woman names ? (m/w)").strip().lower()
-        if choice_name == 'm' :
-            choosen_name = man_name
-            save_names(man_name)
+    while True:
+        choice_name = input("Do you want to generate man names or woman names? (m/w): ").strip().lower()
+        
+        if choice_name == 'm':
+            chosen_name = names.get_first_name(gender='male')
+            save_names(chosen_name)
+            return chosen_name
 
-        elif choice_name == 'w' :
-            choosen_name = woman_name
-            save_names(woman_name)
-
-        else :
-            print(f"Please enter 'm' or 'w' !")
-
-    except ValueError :
-        print(f"Invalid input")
-    return choosen_name
+        elif choice_name == 'w':
+            chosen_name = names.get_first_name(gender='female')
+            save_names(chosen_name)
+            return chosen_name
 #########################################################################################
 #Define the functions :
 # This function allows to select randomly an element from the defined list
@@ -124,9 +118,9 @@ def clear_score():
 
 #############################################################################################
 # Create 3 functions to save the generated names from the library names, read and clear them
-def save_names():
+def save_names(name):
     try:
-        names_entry = f" - {choosen_name}"
+        names_entry = f" - {name}"
         with open("names.txt", "a", encoding="utf-8") as file:
             file.write(names_entry + "\n")
     except Exception as e:
@@ -174,7 +168,6 @@ def display_menu():
 try:
     while True:
         display_menu()
-        generate_n()
         choice = input(f"Choose an option (1 - 2 - 3 - 4 - 5 - 6) :")
         if choice == '1' :
             choosen_word, len_word = hasard_word()
