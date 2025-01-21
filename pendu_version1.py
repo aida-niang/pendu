@@ -42,7 +42,7 @@ def generate_n() :
 def hasard_word(words) :
 
     choosen_word = random.choice(words)
-    len_word = len(choosen_word)
+    len_word = len(choosen_word) - 1
 
     return choosen_word, len_word
 
