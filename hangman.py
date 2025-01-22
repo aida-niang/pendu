@@ -126,6 +126,31 @@ def choose_word(words, difficulty):
 
     return random.choice(filtered_words)
 
+# Fonction pour afficher les scores
+def view_scores(score_file):
+    try:
+        with open(score_file, 'r', encoding='utf-8') as f:
+            scores = f.readlines()
+        if scores:
+            screen.fill(WHITE)
+            draw_text("Scores:", font, BLACK, screen, window_width // 2, window_height // 4)
+            for i, score in enumerate(scores, start=1):
+                draw_text(f"{i}. {score.strip()}", font, BLACK, screen, window_width // 2, window_height // 4 + i * 40)
+            pygame.display.update()
+            pygame.time.wait(3000)
+        else:
+            print("No scores available.")
+    except FileNotFoundError:
+        print("No scores file found.")
+
+# Fonction pour supprimer tous les scores
+def delete_scores(score_file):
+    try:
+        open(score_file, 'w').close()  # Vide le fichier
+        print("All scores deleted.")
+    except FileNotFoundError:
+        print("No scores file found.")
+ 
 # Main loop
 def main():
     running = True
