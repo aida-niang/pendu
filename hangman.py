@@ -66,7 +66,44 @@ def choose_difficulty():
                     difficulty = "hard"
     return difficulty
 
-# Fonction principale
+# Write First  name
+def get_player_name():
+    input_box = pygame.Rect(window_width // 2 - 100, window_height // 2, 200, 40)
+    color_inactive = pygame.Color('lightskyblue3')
+    color_active = pygame.Color('dodgerblue2')
+    color = color_inactive
+    active = False
+    text = ''
+    font = pygame.font.Font(None, 32)
+
+    while True:
+        screen.fill(WHITE)
+        draw_text("Enter your name:", font, BLACK, screen, window_width // 2, window_height // 3)
+        pygame.draw.rect(screen, color, input_box, 2)
+        draw_text(text, font, BLACK, screen, window_width // 2, window_height // 2)
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if input_box.collidepoint(event.pos):
+                    active = True
+                    color = color_active
+                else:
+                    active = False
+                    color = color_inactive
+            if event.type == pygame.KEYDOWN:
+                if active:
+                    if event.key == pygame.K_RETURN:
+                        return text
+                    elif event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        text += event.unicode
+
+# Main loop
 def main():
     running = True
     while running:
