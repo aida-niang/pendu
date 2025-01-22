@@ -1,5 +1,6 @@
 import pygame
 import os
+import math
 
 #settings for display
 pygame.init() #initializes the display module
@@ -60,7 +61,7 @@ def draw():
     win.fill(WHITE) #doesn't work, every second the screen should be white. Need to update the display, as it's uploading every second
 
     #draw buttons
-    for letter in letters:
+    for letter in letters: #in letters, there a list in which we put the triplet for the circle, the letter and its position. x and y are the position, ltr is the ascii letter associated with this element in the loop. we use this loop to draw a circle and put the letter in
         x,y,ltr=letter
         pygame.draw.circle(win, BLACK, (x,y), RADIUS, 3)
         text=LETTER_FONT.render(ltr,1,BLACK)
@@ -79,8 +80,14 @@ while run:
         if event.type == pygame.QUIT: #ability to close the game by clicking on the red cross X
             run = False #quit pygame
         if event.type == pygame.MOUSEBUTTONDOWN:
-            pos = pygame.mouse.get_pos() #how you get the position of the mouse. gives the position of the mouse, especially useful when clicking
-            print(pos)
+            m_x, m_y = pygame.mouse.get_pos() #how you get the position of the mouse. gives the position of the mouse, especially useful when clicking
+            for letter in letters:
+                x, y, ltr = letter
+                distance = math.sqrt((x - m_x)**2+(y-m_y)**2) #pythagore
+                if distance < RADIUS:
+                    print(ltr)
     
 
 pygame.quit()
+
+#for the mouse input : we need to check if the mouse input is in a range less than the distance between the center of a circle and the radius
