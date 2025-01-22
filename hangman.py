@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # Initialize Pygame
 pygame.init()
@@ -102,6 +103,28 @@ def get_player_name():
                         text = text[:-1]
                     else:
                         text += event.unicode
+
+# Fonction pour charger les mots
+def load_words(file):
+    try:
+        with open(file, 'r', encoding='utf-8') as f:
+            return [line.strip() for line in f if line.strip()]
+    except FileNotFoundError:
+        print(f"Error: The file '{file}' was not found.")
+        return []
+
+# Fonction pour choisir un mot selon la difficulté
+def choose_word(words, difficulty):
+    if difficulty == "easy":
+        filtered_words = [word for word in words if len(word) <= 6]
+    elif difficulty == "medium":
+        filtered_words = [word for word in words if 7 <= len(word) <= 9]
+    elif difficulty == "hard":
+        filtered_words = [word for word in words if len(word) > 9]
+    else:
+        filtered_words = words
+
+    return random.choice(filtered_words)
 
 # Main loop
 def main():
