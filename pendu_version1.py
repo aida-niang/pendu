@@ -8,7 +8,7 @@ import names
 #Then later, I will create a separated text file
 #words = ['amina', 'aida', 'yannis']
 
-#Now I will import the words from the text  file (words) :
+#Now I will import the words from the text file (words) :
 def read_words():
     try:
         with open("words.txt", "r") as file:
@@ -75,7 +75,7 @@ def ask_user(choosen_word, len_word) :
         #it allows to assemble the elements of different sequences like tuples or list (the case here)
         word = ''.join(user_word)
         if ' _ ' not in user_word :
-            print(f"Congratulations. You have found the word, it is : {word}")
+            print(f"You have found the word, it is : {word}")
             break
     return user_word, score, user_name
 ###########################################################################################
@@ -91,7 +91,7 @@ def score_player(user_name, score) :
         print(f"Player n°1 : {user_name} has {score} points")
         
     elif score < 0 :
-        print(f"You lost. Good luch for the next time!")
+        print(f"You lost. Good luck for the next time!")
 
     save_score(user_name, score)
 ##########################################################################################
@@ -165,21 +165,33 @@ def clear_names():
 ############################################################################################
 #Create the menu
 def display_menu(): 
-    print(f"\nWelcome to Our hangman game !")
-    print(f"\n****** Menu *******")
-    print(f"1. Launch the game")
-    print(f"2. View score file")
-    print(f"3. Clear score file")
-    print(f"4. Generate names randomly")
-    print(f"5. View names file")
-    print(f"6. Clear names file")
-    print(f"7. Exit")
+    menu_p = input(f"Do you want to print the game menu ? (Yes/No) ").strip().lower()
+    if menu_p == 'yes' :
+        
+        print(f"\n****** Menu *******")
+        print(f"1. Launch the game")
+        print(f"2. View score file")
+        print(f"3. Clear score file")
+        print(f"4. Generate names randomly")
+        print(f"5. View names file")
+        print(f"6. Clear names file")
+        print(f"7. Exit")
+    elif menu_p == 'no' :
+        print(f"Goodbye. See you soon !")
+        exit()
+    else :
+        print(f"I didn't understand your requiest. Please write 'yes' or 'no' ")
+    
 
 #############################################################################################
 #The main loop of the game
+#Before I puted break everywhere, but I want to return to the menu each time, so I delete this instruction
+print(f"\nWelcome to Our hangman game !\n")
 try:
     while True:
+        
         display_menu()
+
         choice = input(f"Choose an option (1 - 2 - 3 - 4 - 5 - 6) :")
         if choice == '1' :
             words = read_words()
@@ -188,39 +200,40 @@ try:
             score_player(user_name, score)
             if not play_again():
                 print("Thank you for playing. Come back soon!")
-                break
+                
         elif choice == '2' :
             read_score()
-            break
+
         elif choice == '3' :
             while True:  
                 confirm = input("Do you really want to clear the score file ? (yes/no): ").strip().lower()
                 if confirm == "yes":
-                    clear_score()
-                    break  
+                    clear_score()  
                 elif confirm == "no":
-                    print("The score file not cleared.")
-                    break  
+                    print("The score file not cleared.") 
                 else:
                     print("Invalid input. Please type 'yes' or 'no'.")
-                    break
+                    confirm = input("Do you really want to clear the score file ? (yes/no): ").strip().lower()
+                    
+
         elif choice == '4' :
             generate_n()
+            
         elif choice == '5' :
             read_names()
-            break
+            
         elif choice == '6' :
             while True:  
                 confirm = input("Do you really want to clear the names file ? (yes/no): ").strip().lower()
                 if confirm == "yes":
                     clear_names()
-                    break  
+                      
                 elif confirm == "no":
                     print("The names file not cleared.")
-                    break  
+                     
                 else:
                     print("Invalid input. Please type 'yes' or 'no'.")
-                    break
+                    confirm = input("Do you really want to clear the names file ? (yes/no): ").strip().lower()
 
         elif choice == '7' :
             print("\nExiting the game...")
