@@ -7,7 +7,7 @@ pygame.init()
 window_width = 600
 window_height = 800
 screen = pygame.display.set_mode((window_width, window_height))
-pygame.display.set_caption("Hangman Game")
+title = pygame.display.set_caption("Hangman Game")
 
 # Colors
 WHITE = (255, 255, 255)
@@ -38,6 +38,33 @@ def show_menu():
     draw_text("4. Delete all scores", font, BLACK, screen, window_width // 2, window_height // 2 + 40)
     draw_text("5. Quit", font, BLACK, screen, window_width // 2, window_height // 2 + 80)
     pygame.display.update()
+
+# Display screen difficulty
+def show_difficulty_screen():
+    screen.fill(WHITE)
+    draw_text("Select Difficulty:", font, BLACK, screen, window_width // 2, window_height // 4)
+    draw_text("1. Easy", font, BLACK, screen, window_width // 2, window_height // 2 - 30)
+    draw_text("2. Medium", font, BLACK, screen, window_width // 2, window_height // 2)
+    draw_text("3. Hard", font, BLACK, screen, window_width // 2, window_height // 2 + 30)
+    pygame.display.update()
+
+# Choose difficulty
+def choose_difficulty():
+    show_difficulty_screen()
+    difficulty = None
+    while difficulty is None:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    difficulty = "easy"
+                elif event.key == pygame.K_2:
+                    difficulty = "medium"
+                elif event.key == pygame.K_3:
+                    difficulty = "hard"
+    return difficulty
 
 # Fonction principale
 def main():
