@@ -1,45 +1,45 @@
 import pygame
 import random
 
-# Initialisation de Pygame
+# Initialize Pygame
 pygame.init()
 
-# Dimensions de la fenêtre
+# Window dimensions
 window_width = 600
 window_height = 800
 screen = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("Hangman Game")
 
-# Couleurs
+# Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 
-# Polices
+# Fonts
 font = pygame.font.Font(None, 40)
 input_font = pygame.font.Font(None, 30)
 
-# Charger les images du pendu
+# Load hangman images
 hangman_images = [
-    pygame.image.load("images/hangman_1.png"),  # 0 tentatives
-    pygame.image.load("images/hangman_2.png"),  # 1 tentative
-    pygame.image.load("images/hangman_3.png"),  # 2 tentatives
-    pygame.image.load("images/hangman_4.png"),  # 3 tentatives
-    pygame.image.load("images/hangman_5.png"),  # 4 tentatives
-    pygame.image.load("images/hangman_6.png"),  # 5 tentatives
-    pygame.image.load("images/hangman_7.png"),  # 6 tentatives
+    pygame.image.load("images/hangman_1.png"),  # 0 attempts
+    pygame.image.load("images/hangman_2.png"),  # 1 attempt
+    pygame.image.load("images/hangman_3.png"),  # 2 attempts
+    pygame.image.load("images/hangman_4.png"),  # 3 attempts
+    pygame.image.load("images/hangman_5.png"),  # 4 attempts
+    pygame.image.load("images/hangman_6.png"),  # 5 attempts
+    pygame.image.load("images/hangman_7.png"),  # 6 attempts
 ]
 
-# Fonction pour afficher un texte à l'écran
+# Function to draw text on the screen
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
     textrect = textobj.get_rect()
     textrect.center = (x, y)
     surface.blit(textobj, textrect)
 
-# Fonction pour afficher l'écran de menu
+# Function to display the main menu
 def show_menu():
     screen.fill(WHITE)
     draw_text("--- Hangman Game Menu ---", font, BLACK, screen, window_width // 2, window_height // 4)
@@ -50,7 +50,7 @@ def show_menu():
     draw_text("5. Quit", font, BLACK, screen, window_width // 2, window_height // 2 + 80)
     pygame.display.update()
 
-# Fonction pour afficher l'écran de choix de difficulté
+# Function to display the difficulty selection screen
 def show_difficulty_screen():
     screen.fill(WHITE)
     draw_text("Select Difficulty:", font, BLACK, screen, window_width // 2, window_height // 4)
@@ -59,7 +59,7 @@ def show_difficulty_screen():
     draw_text("3. Hard", font, BLACK, screen, window_width // 2, window_height // 2 + 30)
     pygame.display.update()
 
-# Fonction pour choisir la difficulté
+# Function to choose difficulty
 def choose_difficulty():
     show_difficulty_screen()
     difficulty = None
@@ -77,7 +77,7 @@ def choose_difficulty():
                     difficulty = "hard"
     return difficulty
 
-# Fonction pour afficher l'écran de saisie du prénom
+# Function to get the player's name
 def get_player_name():
     input_box = pygame.Rect(window_width // 2 - 100, window_height // 2, 200, 40)
     color_inactive = pygame.Color('lightskyblue3')
@@ -114,7 +114,7 @@ def get_player_name():
                     else:
                         text += event.unicode
 
-# Fonction pour charger les mots
+# Function to load words from a file
 def load_words(file):
     try:
         with open(file, 'r', encoding='utf-8') as f:
@@ -123,7 +123,7 @@ def load_words(file):
         print(f"Error: The file '{file}' was not found.")
         return []
 
-# Fonction pour choisir un mot selon la difficulté
+# Function to choose a word based on difficulty
 def choose_word(words, difficulty):
     if difficulty == "easy":
         filtered_words = [word for word in words if len(word) <= 6]
@@ -136,7 +136,7 @@ def choose_word(words, difficulty):
 
     return random.choice(filtered_words)
 
-# Fonction pour afficher les scores
+# Function to view scores
 def view_scores(score_file):
     try:
         with open(score_file, 'r', encoding='utf-8') as f:
@@ -153,15 +153,15 @@ def view_scores(score_file):
     except FileNotFoundError:
         print("No scores file found.")
 
-# Fonction pour supprimer tous les scores
+# Function to delete all scores
 def delete_scores(score_file):
     try:
-        open(score_file, 'w').close()  # Vide le fichier
+        open(score_file, 'w').close()  # Clear the file
         print("All scores deleted.")
     except FileNotFoundError:
         print("No scores file found.")
 
-# Fonction principale du jeu
+# Main game function
 def play_game(word_file, score_file):
     words = load_words(word_file)
     if not words:
@@ -182,11 +182,11 @@ def play_game(word_file, score_file):
         draw_text(f"Word: {' '.join([letter if letter in guessed_letters else '_' for letter in word_to_guess])}", font, BLACK, screen, window_width // 2, window_height // 3)
         draw_text(f"Attempts left: {remaining_attempts}", font, BLACK, screen, window_width // 2, window_height // 2)
         draw_text(f"Score: {score}", font, BLACK, screen, window_width // 2, window_height // 2 + 40)
-        screen.blit(hangman_images[7 - remaining_attempts], (window_width // 2 - 100, window_height // 2 + 80))  # Afficher le pendu
+        screen.blit(hangman_images[7 - remaining_attempts], (window_width // 2 - 100, window_height // 2 + 80))  # Display the hangman image
 
         pygame.display.update()
 
-        # Écouter les événements
+        # Listen for events
         letter = None
         while letter is None:
             for event in pygame.event.get():
@@ -195,23 +195,23 @@ def play_game(word_file, score_file):
                     exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        return  # Retour au menu
+                        return  # Return to menu
 
-                    # Vérifier que l'utilisateur a appuyé sur une lettre valide
+                    # Check if a valid letter was pressed
                     if pygame.K_a <= event.key <= pygame.K_z:
                         letter = chr(event.key).lower()
 
         if letter in proposed_letters:
-            continue  # Si la lettre a déjà été proposée, on ne la prend pas en compte
+            continue  # Skip if the letter was already proposed
 
         proposed_letters.add(letter)
 
         if letter in word_to_guess:
             guessed_letters.add(letter)
-            score += 10  # Ajouter des points pour une bonne lettre
+            score += 10  # Add points for a correct letter
         else:
             remaining_attempts -= 1
-            score -= 5  # Enlever des points pour une mauvaise lettre
+            score -= 5  # Deduct points for a wrong letter
 
         if all(letter in guessed_letters for letter in word_to_guess):
             draw_text(f"Congrats! You guessed the word: {word_to_guess}", font, GREEN, screen, window_width // 2, window_height // 2 + 100)
@@ -224,51 +224,39 @@ def play_game(word_file, score_file):
         pygame.display.update()
         pygame.time.delay(2000)
 
-    # Enregistrer le score
+    # Save the score
     with open(score_file, 'a', encoding='utf-8') as f:
         f.write(f"{player_name}: {score}\n")
 
-    # Demander si le joueur veut rejouer
-    while True:
-        screen.fill(WHITE)
-        draw_text("Do you want to play again? (y/n)", font, BLACK, screen, window_width // 2, window_height // 2 + 140)
-        pygame.display.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_y:
-                    return True
-                elif event.key == pygame.K_n:
-                    return False
-
-# Fonction principale du programme
+# Main program loop
 def main():
-    word_file = "mots.txt"
+    word_file = "words.txt"
     score_file = "scores.txt"
+
     while True:
         show_menu()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
-                    if not play_game(word_file, score_file):
-                        return  # Si le joueur ne veut pas rejouer, quitter
-                elif event.key == pygame.K_2:
-                    new_word = get_player_name()
-                    with open(word_file, 'a', encoding='utf-8') as f:
-                        f.write(new_word + "\n")
-                elif event.key == pygame.K_3:
-                    view_scores(score_file)
-                elif event.key == pygame.K_4:
-                    delete_scores(score_file)
-                elif event.key == pygame.K_5:
+        choice = None
+        while choice is None:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        play_game(word_file, score_file)
+                    elif event.key == pygame.K_2:
+                        word = input("Enter a new word: ").strip()
+                        if word:
+                            with open(word_file, 'a', encoding='utf-8') as f:
+                                f.write(f"{word}\n")
+                            print("Word added successfully!")
+                    elif event.key == pygame.K_3:
+                        view_scores(score_file)
+                    elif event.key == pygame.K_4:
+                        delete_scores(score_file)
+                    elif event.key == pygame.K_5:
+                        pygame.quit()
+                        exit()
 
 if __name__ == "__main__":
     main()
