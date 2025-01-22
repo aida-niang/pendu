@@ -7,6 +7,25 @@ WIDTH, HEIGHT = 800, 500 #setting the size of the game window
 win = pygame.display.set_mode((WIDTH, HEIGHT)) #initializes a windows with WIDTH and HEIGHT parameters
 pygame.display.set_caption("Le Super Jeu du Pendu!") #game's title 
 WHITE = (255,255,255)
+BLACK=(0,0,0)
+
+#buttons variables
+#creating the circle around the letter
+RADIUS = 20
+GAP = 15
+letters = []
+startx = round((WIDTH-(RADIUS*2+GAP)*13)/2)
+starty = 400
+#adding the letter in the circle
+A = 65 #cf ascii, A = 65, B=66... et ajouter dans append A +i
+LETTER_FONT= pygame.font.SysFont('Arial',30)
+
+for i in range(26):
+    x=startx+GAP*2+((RADIUS*2+GAP)*(i%13)) #i%13 est une fonction périodique qui fait 0,1,2...12 et réitère dès qu'on passe l'élément 13. RADIUS*2+GAP distance entre les boutons. GAP*2 crée un gap différent avec les bords de l'écran, qui sera différent de l'écart entre les boutons
+    y= starty+(i//13*(GAP+RADIUS*2))
+    letters.append([x,y, chr(A+i)]) #chr convertit le chiffre en ascii
+
+
 
 
 #load images
@@ -36,12 +55,24 @@ FPS = 60 #setting the maximum speed of the game at 60 frames per second
 clock = pygame.time.Clock() #clock object
 run = True #control the while loop below. will be set to false when the game is over
 
+
+def draw():
+    win.fill(WHITE) #doesn't work, every second the screen should be white. Need to update the display, as it's uploading every second
+
+    #draw buttons
+    for letter in letters:
+        x,y,ltr=letter
+        pygame.draw.circle(win, BLACK, (x,y), RADIUS, 3)
+        text=LETTER_FONT.render(ltr,1,BLACK)
+        win.blit(text, (x - text.get_width()/2,y-text.get_height()/2))
+
+    win.blit(pendu_etapes[status], (50,50))
+    pygame.display.update() #wouhou
+
 while run:
     clock.tick(FPS)#clock object that's counting at 60 FPS
 
-    win.fill(WHITE) #doesn't work, every second the screen should be white. Need to update the display, as it's uploading every second
-    win.blit(pendu_etapes[status], (150,100))
-    pygame.display.update() #wouhou
+    draw()
 
     #for loop to make it possible to create events such as clicking with a mouse
     for event in pygame.event.get():
