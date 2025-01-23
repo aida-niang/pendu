@@ -21,7 +21,9 @@ starty = 400
 #adding the letter in the circle
 A = 65 #cf ascii, A = 65, B=66... et ajouter dans append A +i
 LETTER_FONT= pygame.font.SysFont('Arial',30)
+WORD_FONT= pygame.font.SysFont('comicsans',50)
 
+#define the center point where the buttons will be created
 for i in range(26):
     x=startx+GAP*2+((RADIUS*2+GAP)*(i%13)) #i%13 est une fonction périodique qui fait 0,1,2...12 et réitère dès qu'on passe l'élément 13. RADIUS*2+GAP distance entre les boutons. GAP*2 crée un gap différent avec les bords de l'écran, qui sera différent de l'écart entre les boutons
     y= starty+(i//13*(GAP+RADIUS*2))
@@ -50,7 +52,8 @@ for i in range(7):
 
 #game status
 status = 0
-
+word = "PYTHON"
+guessed = []
 
 #setup game loop
 FPS = 60 #setting the maximum speed of the game at 60 frames per second
@@ -60,6 +63,16 @@ run = True #control the while loop below. will be set to false when the game is 
 
 def draw():
     win.fill(WHITE) #doesn't work, every second the screen should be white. Need to update the display, as it's uploading every second
+
+    #draw words
+    display_word=""
+    for letter in word:
+        if letter in guessed:
+            display_word += letter+ " "
+        else:
+            display_word += "_ "
+    text = WORD_FONT.render(display_word, 1, BLACK)
+    win.blit(text, (400, 200))
 
     #draw buttons
     for letter in letters: #in letters, there a list in which we put the quadruplet for the circle, the letter and its position. x and y are the position, ltr is the ascii letter associated with this element in the loop. visible check if the item is visible or not. we use this loop to draw a circle and put the letter in
@@ -89,7 +102,24 @@ while run:
                     distance = math.sqrt((x - m_x)**2+(y-m_y)**2) #pythagore
                     if distance < RADIUS:
                         letter[3]=False #the fourth element of the quadruplet will be false, meaning the letter will disappear
+                        guessed.append(ltr)
+                        if ltr not in word:
+                            status +=1 #à reprendre pour faire correspondre au fichier txt
+                            if status > 6:
+                                run = False #close the game after the guy is hanged
                         print(ltr)
+
+    victory = True
+    for letter in word:
+        if letter not in guessed:
+            victory = False
+            break
+    
+    if victory:
+        print("Victory!")
+
+    if status == 6:
+        print("Soyboy")
 
 pygame.quit()
 
