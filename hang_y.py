@@ -8,7 +8,7 @@ WIDTH, HEIGHT = 800, 500 #setting the size of the game window
 win = pygame.display.set_mode((WIDTH, HEIGHT)) #initializes a windows with WIDTH and HEIGHT parameters
 pygame.display.set_caption("Le Super Jeu du Pendu!") #game's title 
 WHITE = (255,255,255)
-BLACK=(0,0,0)
+BLACK = (0,0,0)
 
 #buttons variables
 #creating the circle around the letter
@@ -17,6 +17,7 @@ GAP = 15
 letters = []
 startx = round((WIDTH-(RADIUS*2+GAP)*13)/2)
 starty = 400
+
 #adding the letter in the circle
 A = 65 #cf ascii, A = 65, B=66... et ajouter dans append A +i
 LETTER_FONT= pygame.font.SysFont('Arial',30)
