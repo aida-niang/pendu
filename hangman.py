@@ -23,13 +23,13 @@ input_font = pygame.font.Font(None, 30)
 
 # Load hangman images
 hangman_images = [
+    pygame.image.load("images/hangman_0.png"),
     pygame.image.load("images/hangman_1.png"),
     pygame.image.load("images/hangman_2.png"),
     pygame.image.load("images/hangman_3.png"),
     pygame.image.load("images/hangman_4.png"),
     pygame.image.load("images/hangman_5.png"),
     pygame.image.load("images/hangman_6.png"),
-    pygame.image.load("images/hangman_7.png"),
 ]
 
 # Azerty keyboard layout
@@ -358,7 +358,7 @@ def play_game(word_file, score_file):
         draw_text(f"Score: {score}", font, BLACK, screen, window_width - 150, 70)
 
         # Draw hangman image
-        screen.blit(hangman_images[7 - remaining_attempts], (window_width // 2 - 100, window_height // 4))
+        screen.blit(hangman_images[6 - remaining_attempts], (window_width // 2 - 100, window_height // 4))
 
         # Draw the word to guess, showing guessed letters or underscores
         word_display = ' '.join([letter if letter.lower() in guessed_letters else '_' for letter in word_to_guess])
@@ -406,7 +406,7 @@ def play_game(word_file, score_file):
             score += 10
         else:
             remaining_attempts -= 1
-            score -= 5
+            score -= 10
             wrong_letters.add(selected_letter.lower())  # Incorrect guess
 
         # Check if the word is fully guessed
@@ -434,15 +434,15 @@ def main():
                 pygame.quit()
                 exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
+                if event.key == pygame.K_1 or event.key == pygame.K_KP1:
                     play_game(word_file, score_file)
-                elif event.key == pygame.K_2:
+                elif event.key == pygame.K_2 or event.key == pygame.K_KP2:
                     add_word(word_file)
-                elif event.key == pygame.K_3:
+                elif event.key == pygame.K_3 or event.key == pygame.K_KP3:
                     view_scores(score_file)
-                elif event.key == pygame.K_4:
+                elif event.key == pygame.K_4 or event.key == pygame.K_KP4:
                     confirm_delete_scores(score_file)
-                elif event.key == pygame.K_5 or event.key == pygame.K_RETURN:
+                elif event.key == pygame.K_5 or event.key == pygame.K_KP5 or event.key == pygame.K_RETURN:
                     confirm_quit()  # Call the confirmation dialog function 
                 else:
                     print("Choose a valid option")
