@@ -5,7 +5,7 @@ import random
 pygame.init()
 
 # Window dimensions
-window_width = 600
+window_width = 700
 window_height = 800
 screen = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("Hangman Game")
@@ -46,20 +46,34 @@ def draw_text(text, font, color, surface, x, y):
     textrect.center = (x, y)
     surface.blit(textobj, textrect)
 
-# Function to draw the keyboard on the screen
-def draw_keyboard(proposed_letters):
+def draw_keyboard(proposed_letters, guessed_letters, wrong_letters):
     start_x = window_width // 2 - 200
-    start_y = window_height - 250  # Lower the keyboard
+    start_y = window_height - 250
     key_size = 40
     key_gap = 10
 
+    # Function to draw the keyboard on the screen
     for row_idx, row in enumerate(keyboard_layout):
         for col_idx, letter in enumerate(row):
             x = start_x + col_idx * (key_size + key_gap)
             y = start_y + row_idx * (key_size + key_gap)
-            color = GREEN if letter in proposed_letters else BLUE
-            pygame.draw.rect(screen, color, (x, y, key_size, key_size))
-            draw_text(letter, font, WHITE, screen, x + key_size // 2, y + key_size // 2)
+            key_rect = pygame.Rect(x, y, key_size, key_size)
+
+            # Set the key color based on the guess status
+            if letter.lower() in guessed_letters:
+                color = GREEN  # Correctly guessed letter
+            elif letter.lower() in wrong_letters:
+                color = RED  # Incorrectly guessed letter
+            else:
+                color = BLUE  # Default color for unguessed letters
+
+            # Draw the button (rectangle)
+            pygame.draw.rect(screen, color, key_rect)
+            pygame.draw.rect(screen, BLACK, key_rect, 2)  # Border to make the keys look more defined
+
+            # Draw the letter inside the key
+            draw_text(letter.upper(), font, BLACK, screen, x + key_size // 2, y + key_size // 2)
+
 
 # Function to display the main menu
 def show_menu():
@@ -230,13 +244,95 @@ def add_word(word_file):
     pygame.display.update()
     pygame.time.delay(1000)
 
+# Function to display the delete scores confirmation screen
+def confirm_delete_scores(score_file):
+    screen.fill(WHITE)
+    draw_text("Do you really want to delete all scores?", font, BLACK, screen, window_width // 2, window_height // 3)
+    draw_text("Press Y to confirm or N to cancel.", font, BLACK, screen, window_width // 2, window_height // 2)
+    pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_y:  # User confirms delete
+                    with open(score_file, 'w', encoding='utf-8') as f:
+                        f.truncate(0)  # Empty the file
+                    screen.fill(WHITE)
+                    draw_text("All scores deleted!", font, GREEN, screen, window_width // 2, window_height // 2)
+                    pygame.display.update()
+                    pygame.time.delay(2000)  # Show message for 2 seconds
+                    return
+                elif event.key == pygame.K_n:  # User cancels delete
+                    screen.fill(WHITE)
+                    draw_text("Scores not deleted.", font, RED, screen, window_width // 2, window_height // 2)
+                    pygame.display.update()
+                    pygame.time.delay(2000)  # Show message for 2 seconds
+                    return
+
 # Function to delete all scores
 def delete_scores(score_file):
-    with open(score_file, 'w', encoding='utf-8') as f:
-        f.truncate(0)  # Empty the file
-    print("All scores deleted.")
+    print("Do you really want to delete all scores? (y/n): ")
+    confirm = input().strip().lower()  # Ask for confirmation from the user
+    
+    if confirm == 'y':
+        with open(score_file, 'w', encoding='utf-8') as f:
+            f.truncate(0)  # Empty the file
+        print("All scores deleted.")
+    elif confirm == 'n':
+        print("Scores not deleted.")
+    else:
+        print("Invalid choice. Please enter 'y' or 'n'.")
 
-# Function to play the game
+# Function to display the delete scores confirmation screen
+def confirm_delete_scores(score_file):
+    screen.fill(WHITE)
+    draw_text("Do you really want to delete all scores?", font, BLACK, screen, window_width // 2, window_height // 3)
+    draw_text("Press Y to confirm or N to cancel.", font, BLACK, screen, window_width // 2, window_height // 2)
+    pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_y:  # User confirms delete
+                    with open(score_file, 'w', encoding='utf-8') as f:
+                        f.truncate(0)  # Empty the file
+                    screen.fill(WHITE)
+                    draw_text("All scores deleted!", font, GREEN, screen, window_width // 2, window_height // 2)
+                    pygame.display.update()
+                    pygame.time.delay(2000)  # Show message for 2 seconds
+                    return
+                elif event.key == pygame.K_n:  # User cancels delete
+                    screen.fill(WHITE)
+                    draw_text("Scores not deleted.", font, RED, screen, window_width // 2, window_height // 2)
+                    pygame.display.update()
+                    pygame.time.delay(2000)  # Show message for 2 seconds
+                    return
+
+# Function to display the quit confirmation screen
+def confirm_quit():
+    screen.fill(WHITE)
+    draw_text("Do you really want to quit?", font, BLACK, screen, window_width // 2, window_height // 3)
+    draw_text("Press Y to confirm or N to cancel.", font, BLACK, screen, window_width // 2, window_height // 2)
+    pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_y:  # User confirms quit
+                    pygame.quit()
+                    exit()
+                elif event.key == pygame.K_n:  # User cancels quit
+                    return  # Exit the confirmation screen and return to the menu
+
 def play_game(word_file, score_file):
     words = load_words(word_file)
     if not words:
@@ -247,8 +343,9 @@ def play_game(word_file, score_file):
     player_name = get_player_name()
     word_to_guess = choose_word(words, difficulty)
     guessed_letters = set()
-    proposed_letters = set()
-    remaining_attempts = 7 if difficulty == "easy" else 6 if difficulty == "medium" else 5
+    wrong_letters = set()  # Track incorrect guesses
+    proposed_letters = set()  # Track all selected letters (both correct and incorrect)
+    remaining_attempts = 6
     score = 0
 
     while remaining_attempts > 0:
@@ -265,8 +362,8 @@ def play_game(word_file, score_file):
         word_display = ' '.join([letter if letter.lower() in guessed_letters else '_' for letter in word_to_guess])
         draw_text(f"Word: {word_display}", font, BLACK, screen, window_width // 2, window_height // 2 + 40)
 
-        # Draw keyboard
-        draw_keyboard(proposed_letters)
+        # Draw the keyboard with updated colors for correct/incorrect letters
+        draw_keyboard(proposed_letters, guessed_letters, wrong_letters)
         pygame.display.update()
 
         # Handle events
@@ -279,6 +376,9 @@ def play_game(word_file, score_file):
                 if event.type == pygame.KEYDOWN:
                     if pygame.K_a <= event.key <= pygame.K_z:
                         selected_letter = chr(event.key).upper()
+                    elif event.key == pygame.K_RETURN:  # Check for Enter key to return to menu
+                        return  # Return to the menu by exiting the current game loop
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_x, mouse_y = event.pos
                     start_x = window_width // 2 - 200
@@ -300,11 +400,12 @@ def play_game(word_file, score_file):
         proposed_letters.add(selected_letter)
 
         if selected_letter.lower() in word_to_guess.lower():
-            guessed_letters.add(selected_letter.lower())
+            guessed_letters.add(selected_letter.lower())  # Correct guess
             score += 10
         else:
             remaining_attempts -= 1
             score -= 5
+            wrong_letters.add(selected_letter.lower())  # Incorrect guess
 
         # Check if the word is fully guessed
         if all(letter.lower() in guessed_letters for letter in word_to_guess.lower()):
@@ -338,10 +439,12 @@ def main():
                 elif event.key == pygame.K_3:
                     view_scores(score_file)
                 elif event.key == pygame.K_4:
-                    delete_scores(score_file)
-                elif event.key == pygame.K_5:
-                    pygame.quit()
-                    exit()
+                    confirm_delete_scores(score_file)
+                elif event.key == pygame.K_5 or event.key == pygame.K_RETURN:
+                    confirm_quit()  # Call the confirmation dialog function 
+                else:
+                    print("Choose a valid option")
+
 
 if __name__ == "__main__":
     main()
