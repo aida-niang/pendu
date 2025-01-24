@@ -1,2 +1,4 @@
-Aida: -15
+Aida: 15
 aida: -10
+tt: -50
+hh: -30

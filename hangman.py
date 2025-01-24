@@ -335,6 +335,7 @@ def confirm_quit():
                 elif event.key == pygame.K_n:  # User cancels quit
                     return  # Exit the confirmation screen and return to the menu
 
+# Function to play game
 def play_game(word_file, score_file):
     words = load_words(word_file)
     if not words:
@@ -411,14 +412,27 @@ def play_game(word_file, score_file):
 
         # Check if the word is fully guessed
         if all(letter.lower() in guessed_letters for letter in word_to_guess.lower()):
+            # Redraw everything before exiting the loop
+            screen.fill(WHITE)
+            draw_text(f"Player: {player_name}", font, BLACK, screen, window_width - 150, 30)
+            draw_text(f"Score: {score}", font, BLACK, screen, window_width - 150, 70)
+            screen.blit(hangman_images[6 - remaining_attempts], (window_width // 2 - 100, window_height // 4))
+            word_display = ' '.join([letter if letter.lower() in guessed_letters else '_' for letter in word_to_guess])
+            draw_text(f"Word: {word_display}", font, BLACK, screen, window_width // 2, window_height // 2 + 40)
+            draw_keyboard(proposed_letters, guessed_letters, wrong_letters)
             draw_text(f"Congrats! You guessed the word: {word_to_guess}", font, GREEN, screen, window_width // 2, window_height // 2 + 100)
             pygame.display.update()
             pygame.time.delay(2000)
             break
+    
     else:
+        # Show the final hangman image
+        screen.fill(WHITE)
+        screen.blit(hangman_images[-1], (window_width // 2 - 100, window_height // 4))
         draw_text(f"You lost! The word was: {word_to_guess}", font, RED, screen, window_width // 2, window_height // 2 + 100)
         pygame.display.update()
         pygame.time.delay(2000)
+
 
     update_score(score_file, player_name, score)
 
