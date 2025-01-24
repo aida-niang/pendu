@@ -105,17 +105,19 @@ def choose_difficulty():
                 pygame.quit()
                 exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
+                if event.key == pygame.K_1 or event.key == pygame.K_e:
                     difficulty = "easy"
-                elif event.key == pygame.K_2:
+                elif event.key == pygame.K_2 or event.key == pygame.K_m:
                     difficulty = "medium"
-                elif event.key == pygame.K_3:
+                elif event.key == pygame.K_3 or event.key == pygame.K_h:
                     difficulty = "hard"
     return difficulty
 
 # Function to get the player's name
 def get_player_name():
-    input_box = pygame.Rect(window_width // 2 - 100, window_height // 2, 200, 40)
+    input_box = pygame.Rect(0, 0, 200, 40) 
+    input_box.center = (window_width // 2, window_height // 2) 
+    #input_box = pygame.Rect(window_width // 2 - 100, window_height // 2 - 20, 200, 40)
     color_inactive = pygame.Color('lightskyblue3')
     color_active = pygame.Color('dodgerblue2')
     color = color_inactive
