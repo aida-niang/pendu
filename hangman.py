@@ -461,6 +461,8 @@ def main():
                 else:
                     print("Choose a valid option")
 
-
-if __name__ == "__main__":
-    main()
+try :
+    if __name__ == "__main__":
+        main()
+except KeyboardInterrupt :
+    print(f"Exiting .....")
