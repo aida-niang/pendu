@@ -22,7 +22,8 @@ font = pygame.font.Font(None, 40)
 input_font = pygame.font.Font(None, 30)
 
 # Load the sound :
-sound_ = pygame.mixer.Sound('sounds/You_Win_Perfect.wav')
+sound_winner = pygame.mixer.Sound('sounds/You_Win_Perfect.wav')
+sound_loser = pygame.mixer.Sound('sounds/you_lost.wav')
 
 # Load hangman images
 hangman_images = [
@@ -424,8 +425,8 @@ def play_game(word_file, score_file):
             draw_text(f"Word: {word_display}", font, BLACK, screen, window_width // 2, window_height // 2 + 40)
             draw_keyboard(proposed_letters, guessed_letters, wrong_letters)
             draw_text(f"Congrats! You guessed the word: {word_to_guess}", font, GREEN, screen, window_width // 2, window_height // 2 + 100)
-            sound_.play()
-            pygame.time.wait(int(sound_.get_length() * 1000))
+            sound_winner.play()
+            pygame.time.wait(int(sound_winner.get_length() * 1000))
             pygame.display.update()
             pygame.time.delay(2000)
         
@@ -436,6 +437,8 @@ def play_game(word_file, score_file):
         screen.fill(WHITE)
         screen.blit(hangman_images[-1], (window_width // 2 - 100, window_height // 4))
         draw_text(f"You lost! The word was: {word_to_guess}", font, RED, screen, window_width // 2, window_height // 2 + 100)
+        sound_loser.play()
+        pygame.time.wait(int(sound_loser.get_length() * 1000))
         pygame.display.update()
         pygame.time.delay(2000)
 
