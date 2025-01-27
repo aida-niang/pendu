@@ -1,5 +1,1 @@
-Aida: 15
-aida: -10
-tt: -50
-hh: -30
-amina: -140
+Aida: -40

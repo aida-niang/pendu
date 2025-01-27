@@ -27,13 +27,13 @@ sound_loser = pygame.mixer.Sound('sounds/you_lost.wav')
 
 # Load hangman images
 hangman_images = [
-    pygame.image.load("images/hangman_0.png"),
     pygame.image.load("images/hangman_1.png"),
     pygame.image.load("images/hangman_2.png"),
     pygame.image.load("images/hangman_3.png"),
     pygame.image.load("images/hangman_4.png"),
     pygame.image.load("images/hangman_5.png"),
     pygame.image.load("images/hangman_6.png"),
+    pygame.image.load("images/hangman_7.png"),
 ]
 
 # Azerty keyboard layout

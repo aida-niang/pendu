@@ -13,3 +13,9 @@ hardware
 database
 syntax
 networkaida
+aida
+yanis
+amina
+english
+web
+
