@@ -264,16 +264,47 @@ def view_scores(score_file):
 
 # Function to add a word to the word file
 def add_word(word_file):
-    screen.fill(WHITE)
-    draw_text("Enter a new word:", font, BLACK, screen, window_width // 2, window_height // 4)
-    pygame.display.update()
+    input_box = pygame.Rect(0, 0, 200, 40) 
+    input_box.center = (window_width // 2, window_height // 2) 
+    color_inactive = pygame.Color('lightskyblue3')
+    color_active = pygame.Color('dodgerblue2')
+    color = color_inactive
+    active = False
+    text = ''
+    font = pygame.font.Font(None, 32)
 
-    new_word = get_player_name()
-    with open(word_file, 'a', encoding='utf-8') as f:
-        f.write(f"{new_word}\n")
-    draw_text(f"Added word: {new_word}", font, GREEN, screen, window_width // 2, window_height // 2 + 40)
-    pygame.display.update()
-    pygame.time.delay(1000)
+    while True:
+        screen.fill(WHITE)
+        draw_text("Enter a new word:", font, BLACK, screen, window_width // 2, window_height // 3)
+        pygame.draw.rect(screen, color, input_box, 2)
+        draw_text(text, font, BLACK, screen, window_width // 2, window_height // 2)
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if input_box.collidepoint(event.pos):
+                    active = True
+                    color = color_active
+                else:
+                    active = False
+                    color = color_inactive
+            if event.type == pygame.KEYDOWN:
+                if active:
+                    if event.key == pygame.K_RETURN:
+                        with open(word_file, 'a', encoding='utf-8') as f:
+                            f.write(f"{text}\n")
+                        screen.fill(WHITE)
+                        draw_text(f"Added word: {text}", font, GREEN, screen, window_width // 2, window_height // 2 + 40)
+                        pygame.display.update()
+                        pygame.time.delay(1000)
+                        return
+                    elif event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        text += event.unicode
 
 # Function to display the delete scores confirmation screen
 def confirm_delete_scores(score_file):
@@ -401,6 +432,7 @@ def play_game(word_file, score_file):
         # Handle events
         selected_letter = None
         while selected_letter is None:
+            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
