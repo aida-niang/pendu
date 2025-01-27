@@ -90,6 +90,31 @@ def show_menu():
     draw_text("5. Quit", font, BLACK, screen, window_width // 2, window_height // 2 + 80)
     pygame.display.update()
 
+# choose main option
+def choose_menu():
+    word_file = "words.txt"
+    score_file = "scores.txt"
+
+    while True:
+        show_menu()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1 or event.key == pygame.K_KP1:
+                    play_game(word_file, score_file)
+                elif event.key == pygame.K_2 or event.key == pygame.K_KP2:
+                    add_word(word_file)
+                elif event.key == pygame.K_3 or event.key == pygame.K_KP3:
+                    view_scores(score_file)
+                elif event.key == pygame.K_4 or event.key == pygame.K_KP4:
+                    confirm_delete_scores(score_file)
+                elif event.key == pygame.K_5 or event.key == pygame.K_KP5 or event.key == pygame.K_RETURN:
+                    confirm_quit()  # Call the confirmation dialog function 
+                else:
+                    print("Choose a valid option")
+
 # Function to display the difficulty selection screen
 def show_difficulty_screen():
     screen.fill(WHITE)
@@ -339,7 +364,7 @@ def confirm_quit():
                 elif event.key == pygame.K_n:  # User cancels quit
                     return  # Exit the confirmation screen and return to the menu
 
-# Function to play game
+# Function to play game (the main loop of the game)
 def play_game(word_file, score_file):
     words = load_words(word_file)
     if not words:
@@ -445,33 +470,11 @@ def play_game(word_file, score_file):
 
     update_score(score_file, player_name, score)
 
-# Main program
-def main():
-    word_file = "words.txt"
-    score_file = "scores.txt"
-
-    while True:
-        show_menu()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1 or event.key == pygame.K_KP1:
-                    play_game(word_file, score_file)
-                elif event.key == pygame.K_2 or event.key == pygame.K_KP2:
-                    add_word(word_file)
-                elif event.key == pygame.K_3 or event.key == pygame.K_KP3:
-                    view_scores(score_file)
-                elif event.key == pygame.K_4 or event.key == pygame.K_KP4:
-                    confirm_delete_scores(score_file)
-                elif event.key == pygame.K_5 or event.key == pygame.K_KP5 or event.key == pygame.K_RETURN:
-                    confirm_quit()  # Call the confirmation dialog function 
-                else:
-                    print("Choose a valid option")
 
 try :
     if __name__ == "__main__":
-        main()
+        word_file = "words.txt"
+        score_file = "score.txt"
+        choose_menu()  
 except KeyboardInterrupt :
     print(f"Exiting .....")
