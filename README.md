@@ -4,7 +4,7 @@
 
 ## Project Description
 
-his is a Hangman game developed in Python. It’s a classic word-guessing game where the player must guess a hidden word by suggesting letters. The player has a limited number of incorrect guesses (6) before losing the game. This project provides a fun and interactive way to test vocabulary and problem-solving skills.
+This is a Hangman game developed in Python. It’s a classic word-guessing game where the player must guess a hidden word by suggesting letters. The player has a limited number of incorrect guesses (6) before losing the game. This project provides a fun and interactive way to test vocabulary and problem-solving skills.
 
 ## Demo
 
